@@ -1,0 +1,29 @@
+{
+  "name": "header-parser",
+  "version": "1.0.0",
+  "description": "fcc header parser",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "multer": "^1.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trampzju/header-parser.git"
+  },
+  "keywords": [
+    "fcc"
+  ],
+  "author": "Wang Chao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trampzju/header-parser/issues"
+  },
+  "homepage": "https://github.com/trampzju/header-parser#readme"
+}
