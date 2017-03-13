@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
  
 app.get('/', function (req, res) {
-   var ip = req.ip;
+   var ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/);
    var lang = req.get('accept-language').substr(0, 5);
    var reg = /\([^\)]*\)/
    //console.log(req.get('user-agent'));
