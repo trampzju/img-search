@@ -5,49 +5,36 @@ var bodyParser = require('body-parser');
 
 app.use(bodyParser.json()); 
  
-app.get('/', function (req, res) {
-  var data = fs.readFileSync('shorturl.txt');
-  var arr = data.toString().split(";");
-  var str = "";
-  for (index in arr) {
-    str += "<br>" + index + ": " + arr[index];
-  }
-  res.send(str);
-});
+app.get('/imgsearch/*', function (req, res) {
+  var data1 = fs.readFileSync('logs.txt');
+  var arr1 = data1.toString().split(";");
+  var when = new Date();
+  var term = req.params[0];
+  arr1.push('{"term": "' + term + '", "when": "' + when + '"}');
+  fs.writeFile('logs.txt', arr1.join(";"), function (err) {if (err) throw err;}); 
 
-app.get('/new/*', function (req, res) {
-  var url = req.params[0];
-  var reg = /^http(s)?:\/\/(www\.)?(\w+\.){1}(\w+){1}$/;
-  if (!reg.test(url)) {
-    res.send("invalid url!");
-    return;
-  }
-  //console.log(url);
-  var data = fs.readFileSync('shorturl.txt');
-  var arr = data.toString().split(";");
-  arr.push(url);
-  fs.writeFile('shorturl.txt', arr.join(";"), function(err) {
-    if (err) throw err;
+  var data2 = fs.readFileSync('imgs.txt');
+  var arr2 = eval(data2.toString());
+  var keyword = term.split(" ").reduce(function(a, b){
+    return "(" + a + ")" + ".*" + "(" + b + ")" + "+";
   });
-  var str = "";
-  for (index in arr) {
-    str += "<br>" + index + ": " + arr[index];
-  }
+  var reg = new RegExp(keyword, "i");
+  var offset = req.query.offset || 5;
+  var result = [];
+  for (index in arr2) {
+    if(reg.test(arr2[index].snippet)) {
+      result.push(JSON.stringify(arr2[index]));
+    }
+  }  
+  var str = "Results for \"" + req.params[0] + "\":<br>" + result.join("<br>");
   res.send(str);
 });
 
-app.get('/*', function (req, res) {
-  var data = fs.readFileSync('shorturl.txt');
-  var arr = data.toString().split(";"); 
-  var index = parseInt(req.params[0]);
-  console.log(index);
-  if (index < arr.length) {
-    var url = arr[req.params[0]];
-    res.redirect(url);
-  }
-  else {
-    res.send('This short url is invalid!');
-  }
+app.get('/logs', function (req, res) {
+  var data = fs.readFileSync('logs.txt');
+  var arr = data.toString().split(";");
+  var str = "Latest searchs:<br>" + arr.join("<br>");
+  res.send(str);
 });
  
 var server = app.listen(process.env.PORT || 5000, function () {
