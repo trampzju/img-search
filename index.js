@@ -36,6 +36,11 @@ app.get('/logs', function (req, res) {
   var str = "Latest searchs:<br>" + arr.join("<br>");
   res.send(str);
 });
+
+app.get('/', function (req, res) {
+  var str = '1. Use path "imgsearch" like "https://gentle-taiga-46841.herokuapp.com/imgsearch/cat" to search images related to query. <br> 2. Use path "logs" like "https://gentle-taiga-46841.herokuapp.com/logs" to see the log of searching activities.'
+  res.send(str);
+}
  
 var server = app.listen(process.env.PORT || 5000, function () {
  
